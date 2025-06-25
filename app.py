@@ -11,7 +11,7 @@ JSON_PATH = "events.json"
 
 # 서버 준비
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # 모델 준비
 model = SentenceTransformer("all-MiniLM-L6-v2")
