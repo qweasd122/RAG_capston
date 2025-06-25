@@ -39,6 +39,9 @@ client = OpenAI(
 
 @app.route("/ask", methods=["POST", "OPTIONS"])
 def ask():
+    if request.method == "OPTIONS":
+        return '', 204
+    
     user_query = request.json.get("query", "")
     if not user_query:
         return {"error": "질문이 비어 있어요…"}, 400
