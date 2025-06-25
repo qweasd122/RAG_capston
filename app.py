@@ -40,7 +40,11 @@ client = OpenAI(
 @app.route("/ask", methods=["POST", "OPTIONS"])
 def ask():
     if request.method == "OPTIONS":
-        return '', 204
+        response = Response('', status=204)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        return response
     
     user_query = request.json.get("query", "")
     if not user_query:
@@ -72,7 +76,12 @@ def ask():
             if hasattr(chunk.choices[0].delta, "content"):
                 yield chunk.choices[0].delta.content
 
-    return Response(stream_response(), content_type='text/plain')
+
+    response = Response(stream_response(), content_type='text/plain')
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    return response
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
