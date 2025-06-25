@@ -37,7 +37,7 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
-@app.route("/ask", methods=["POST"])
+@app.route("/ask", methods=["POST", "OPTIONS"])
 def ask():
     user_query = request.json.get("query", "")
     if not user_query:
