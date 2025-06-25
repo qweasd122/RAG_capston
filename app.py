@@ -7,7 +7,7 @@ from openai import OpenAI
 import os
 
 # 준비된 JSON 문서 경로
-JSON_PATH = "tweets.json"
+JSON_PATH = "events.json"
 
 # 서버 준비
 app = Flask(__name__)
