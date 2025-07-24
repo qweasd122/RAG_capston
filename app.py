@@ -1,4 +1,4 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, after_this_request
 from flask_cors import CORS
 import json
 from sentence_transformers import SentenceTransformer
@@ -46,6 +46,13 @@ def ask():
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         return response
     
+    @after_this_request
+    def add_cors_headers(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        return response
+
     user_query = request.json.get("query", "")
     if not user_query:
         return {"error": "질문이 비어 있어요…"}, 400
@@ -77,11 +84,12 @@ def ask():
                 yield chunk.choices[0].delta.content
 
 
-    response = Response(stream_response(), content_type='text/plain')
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Headers"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-    return response
+    # response = Response(stream_response(), content_type='text/plain')
+    # response.headers["Access-Control-Allow-Origin"] = "*"
+    # response.headers["Access-Control-Allow-Headers"] = "*"
+    # response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    # return response
+    return Response(stream_response(), content_type='text/plain')
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
