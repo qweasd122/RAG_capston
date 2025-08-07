@@ -20,7 +20,7 @@ model = SentenceTransformer("all-MiniLM-L6-v2")
 def load_text_chunks():
     with open(JSON_PATH, 'r', encoding='utf-8') as f:
         data = json.load(f)
-    texts = [item["content"] for item in data["documents"]]
+    texts = [item["tweet_text"] for item in data["documents"] if "tweet_text" in item]
     text = " ".join(texts)
     words = text.split()
     chunks = [' '.join(words[i:i+300]) for i in range(0, len(words), 300)]
